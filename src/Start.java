@@ -5,7 +5,6 @@ public class Start {
 
     private static char [] [] map;
     private static int size;
-    private static int checkStencil[][];
     private static boolean rival;
     private static boolean marker = true;
     private static int dif; //Уровень сложности
@@ -132,15 +131,6 @@ public class Start {
         return false;
     }   //Горизонтальная проверка
 
-    private static int horizontalCheck(int size) {
-        for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-
-            }
-        }
-        return 0;
-    }
-
     private static void turn(boolean rival, int dif) {
         if (rival){
             if (marker){
@@ -205,9 +195,6 @@ public class Start {
             case (2):
                 break;
             case (3):
-                fillingStancil(size);
-                rateWaays(size);
-
 
                 break;
         }
@@ -216,26 +203,6 @@ public class Start {
         printMap();
     }   //Ход компьютера
 
-    private static int rateWaays(int size) {
-        int way = 0;
-        horizontalCheck(size);
-        return way;
-    }
-
-    private static void fillingStancil(int size) {
-        checkStencil = new int[size][size];
-        for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++){
-                if (map[i][j] == DOT_X){
-                    checkStencil[i][j] = 1;
-                } else if (map[i][j] == DOT_O){
-                    checkStencil[i][j] = -2;
-                } else {
-                    checkStencil[i][j] = 0;
-                }
-            }
-        }
-    }
 
     private static void gameParameter() {
         size = areaSize();
