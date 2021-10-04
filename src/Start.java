@@ -8,6 +8,7 @@ public class Start {
     private static boolean rival;
     private static boolean marker = true;
     private static int dif; //Уровень сложности
+    private static int wayScore[];
 
     private static final char DOT_EMPTY = '·';
     private static final char DOT_X = 'X';
@@ -28,9 +29,9 @@ public class Start {
     }   //Логика игры
 
     private static boolean isEndGame(){
-        if (diagonalCheck()){return true;}
         if (horizontalCheck()){return true;}
         if (verticalCheck()){return true;}
+        if (diagonalCheck()){return true;}
         return checkForDraw();
 
     }   //Проверка окончания игры
@@ -115,8 +116,10 @@ public class Start {
             for (int j = 0; j < size; j++){
                 if (map[i][j]==DOT_X){
                     winPointsX++;
+                    wayScore[i]--;
                 } else if (map[i][j]==DOT_O){
                     winPointsO++;
+                    wayScore[i]++;
                 }
                 if(winPointsX == size){
                     System.out.println("Выиграли крестики");
@@ -126,6 +129,7 @@ public class Start {
                     System.out.println("Выиграли нолики");
                     return true;
                 }
+
             }
         }
         return false;
@@ -246,6 +250,8 @@ public class Start {
                 map [i] [j] = DOT_EMPTY;
             }
         }
+        wayScore = new int[size+size+2];
+
     }   //Инициализация карты
 
     private static void printMap(){
@@ -261,5 +267,8 @@ public class Start {
             }
             System.out.println();
         }
+        for (int i = size+size+2; i>0; i--){
+            System.out.print(wayScore[i-1]);
+        }//temportary
     }   //Отрисовка карты
 }
