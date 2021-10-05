@@ -200,50 +200,47 @@ public class Start {
             case (2):
                 break;
             case (3):
-                int way = 0;
+                int way;
                 int[] wayScore = new int[size+size+2];
                 for(int i = 0; i < size; i++){
-                    wayScore[i] = horizontalScore(i);
-                    wayScore[i+size] = verticalScore(i);
+                    wayScore[i] = wayScore[i] + horizontalScore(i);
+                    wayScore[i+size] = wayScore[i+size] + verticalScore(i);
                     if (i<2){
-                        wayScore[i+size+size - 1] = diagonalScore(i);
+                        wayScore[i+size+size] = wayScore[i+size+size] + diagonalScore(i);
                     }
                 }
 
                 way = switchWay(wayScore);
                 if (way < size){
                     do {
-                        x = random.nextInt(size + 1);
+                        x = random.nextInt(size);
                         y = way + 1;
                     } while (!isValid(x, y));
                 } else if (way < size*2){
                     do {
                         x = way - size + 1;
-                        y = random.nextInt(size + 1);
+                        y = random.nextInt(size);
                     } while (!isValid(x, y));
                 } else {
                     do {
-                        for (int i = 0; i < size; i++) {
-                            if (map[i][i] == DOT_EMPTY) {
-                                x = i;
-                                y = i;
-
+                        if (way == size * 2){
+                            for (int i = 0; i < size; i++) {
+                                if (map[i][i] == DOT_EMPTY) {
+                                    x = i;
+                                    y = i;
+                                }
                             }
                         }
-                        for (int i = 0; i < size; i++) {
-                            if (map[i][size-i-1] == DOT_EMPTY) {
-                                x = i;
-                                y = i;
-                                break;
+                        if (way == size * 2 + 1){
+                            for (int i = 0; i < size; i++) {
+                                if (map[i][size-i-1] == DOT_EMPTY) {
+                                    x = i;
+                                    y = size-i-1;
+                                }
                             }
                         }
                     } while (!isValid(x, y));
-
                 }
-                /*do {
-                    x = random.nextInt(size + 1);
-                    y = random.nextInt(size + 1);
-                } while (isValid(x, y));*/
                 break;
         }
         System.out.println("Компьютер сделал ход " + (x+1) + " " + (y+1));
@@ -270,7 +267,7 @@ public class Start {
 
     private static int diagonalScore(int mark) {
         int score = 0;
-        if (mark==1){
+        if (mark==0){
             for (int i = 0; i < size; i++){
                 if (map[i][i]==DOT_X){
                     score--;
@@ -281,7 +278,7 @@ public class Start {
             }
         }
 
-        if (mark==2){
+        if (mark==1){
             for (int i = 0; i < size; i++){
                 if (map[i][size-i-1]==DOT_X){
                     score--;
