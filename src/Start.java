@@ -157,7 +157,7 @@ public class Start {
         if ((x >= size) || (y >= size) || (x < 0) || (y < 0)) {
             return false;
         }
-        return map[y][x] != DOT_EMPTY;
+        return map[y][x] == DOT_EMPTY;
     }   //Проверка правильности хода
 
     private static void playerOne() {
@@ -166,10 +166,10 @@ public class Start {
             System.out.println("Введите координаты хода по оси Х и У.");
             x = userInput.nextByte();
             y = userInput.nextByte();
-            if (isValid(x, y)){
+            if (!isValid(x-1, y-1)){
                 System.out.println("Вы ввели неправильное значение!");
             }
-        } while (isValid(x, y));
+        } while (!isValid(x-1, y-1));
         map[y - 1][x - 1] = Start.DOT_X;
         printMap();
     }   //Ход игрока 1
@@ -180,10 +180,10 @@ public class Start {
             System.out.println("Введите координаты хода по оси Х и У.");
             x = userInput.nextByte();
             y = userInput.nextByte();
-            if (isValid(x, y)){
+            if (!isValid(x-1, y-1)){
                 System.out.println("Вы ввели неправильное значение!");
             }
-        } while (isValid(x, y));
+        } while (isValid(x-1, y-1));
         map[y - 1][x - 1] = Start.DOT_O;
         printMap();
     }   //Ход игрока 2
@@ -193,8 +193,8 @@ public class Start {
         switch (diff){
             case (1):
                 do {
-                    x = random.nextInt(size + 1);
-                    y = random.nextInt(size + 1);
+                    x = random.nextInt(size);
+                    y = random.nextInt(size);
                 } while (!isValid(x, y));
                 break;
             case (2):
@@ -246,8 +246,8 @@ public class Start {
                 } while (isValid(x, y));*/
                 break;
         }
-        System.out.println("Компьютер сделал ход " + x + " " + y);
-        map[y - 1][x - 1] = Start.DOT_O;
+        System.out.println("Компьютер сделал ход " + (x+1) + " " + (y+1));
+        map[y][x] = Start.DOT_O;
         printMap();
     }   //Ход компьютера
 
