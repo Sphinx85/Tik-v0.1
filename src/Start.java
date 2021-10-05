@@ -8,7 +8,6 @@ public class Start {
     private static boolean rival;
     private static boolean marker = true;
     private static int dif; //Уровень сложности
-    private static int wayScore[];
 
     private static final char DOT_EMPTY = '·';
     private static final char DOT_X = 'X';
@@ -33,7 +32,6 @@ public class Start {
         if (verticalCheck()){return true;}
         if (diagonalCheck()){return true;}
         return checkForDraw();
-
     }   //Проверка окончания игры
 
     private static boolean checkForDraw() {
@@ -116,10 +114,10 @@ public class Start {
             for (int j = 0; j < size; j++){
                 if (map[i][j]==DOT_X){
                     winPointsX++;
-                    wayScore[i]--;
+
                 } else if (map[i][j]==DOT_O){
                     winPointsO++;
-                    wayScore[i]++;
+
                 }
                 if(winPointsX == size){
                     System.out.println("Выиграли крестики");
@@ -153,10 +151,10 @@ public class Start {
     }   //Логика хода
 
     private static boolean isValid(int x, int y){
-        if ((x > size) || (y > size) || (x <= 0) || (y <= 0)) {
-            return true;
+        if ((x >= size) || (y >= size) || (x < 0) || (y < 0)) {
+            return false;
         }
-        return map[y - 1][x - 1] != DOT_EMPTY;
+        return map[y][x] == DOT_EMPTY;
     }   //Проверка правильности хода
 
     private static void playerOne() {
@@ -165,10 +163,10 @@ public class Start {
             System.out.println("Введите координаты хода по оси Х и У.");
             x = userInput.nextByte();
             y = userInput.nextByte();
-            if (isValid(x, y)){
+            if (!isValid(x-1, y-1)){
                 System.out.println("Вы ввели неправильное значение!");
             }
-        } while (isValid(x, y));
+        } while (!isValid(x-1, y-1));
         map[y - 1][x - 1] = Start.DOT_X;
         printMap();
     }   //Ход игрока 1
@@ -179,10 +177,10 @@ public class Start {
             System.out.println("Введите координаты хода по оси Х и У.");
             x = userInput.nextByte();
             y = userInput.nextByte();
-            if (isValid(x, y)){
+            if (!isValid(x-1, y-1)){
                 System.out.println("Вы ввели неправильное значение!");
             }
-        } while (isValid(x, y));
+        } while (isValid(x-1, y-1));
         map[y - 1][x - 1] = Start.DOT_O;
         printMap();
     }   //Ход игрока 2
@@ -192,21 +190,131 @@ public class Start {
         switch (diff){
             case (1):
                 do {
-                    x = random.nextInt(size + 1);
-                    y = random.nextInt(size + 1);
-                } while (isValid(x, y));
+                    x = random.nextInt(size);
+                    y = random.nextInt(size);
+                } while (!isValid(x, y));
                 break;
             case (2):
+                System.out.println("Данный уровень сложности не реализован");
+                do {
+                    x = random.nextInt(size);
+                    y = random.nextInt(size);
+                } while (!isValid(x, y));
                 break;
             case (3):
-
+                int way;
+                int[] wayScore = new int[size+size+2];
+                for(int i = 0; i < size; i++){
+                    wayScore[i] = wayScore[i] + horizontalScore(i);
+                    wayScore[i+size] = wayScore[i+size] + verticalScore(i);
+                    if (i<2){
+                        wayScore[i+size+size] = wayScore[i+size+size] + diagonalScore(i);
+                    }
+                }
+                way = switchWay(wayScore);
+                if (way < size){
+                    do {
+                        x = random.nextInt(size);
+                        y = way + 1;
+                    } while (!isValid(x, y));
+                } else if (way < size*2){
+                    do {
+                        x = way - size + 1;
+                        y = random.nextInt(size);
+                    } while (!isValid(x, y));
+                } else {
+                    do {
+                        if (way == size * 2){
+                            for (int i = 0; i < size; i++) {
+                                if (map[i][i] == DOT_EMPTY) {
+                                    x = i;
+                                    y = i;
+                                }
+                            }
+                        }
+                        if (way == size * 2 + 1){
+                            for (int i = 0; i < size; i++) {
+                                if (map[i][size-i-1] == DOT_EMPTY) {
+                                    x = i;
+                                    y = size-i-1;
+                                }
+                            }
+                        }
+                    } while (!isValid(x, y));
+                }
                 break;
         }
-        System.out.println("Компьютер сделал ход " + x + " " + y);
-        map[y - 1][x - 1] = Start.DOT_O;
+        System.out.println("Компьютер сделал ход " + (x+1) + " " + (y+1));
+        map[y][x] = Start.DOT_O;
         printMap();
     }   //Ход компьютера
 
+    private static int switchWay(int[] score) {
+        int rate = 0;
+        int way = 0;
+        for (int i = 0; i < score.length; i++){
+            if (score[i] > rate){
+                rate = score[i];
+                way = i;
+            }
+            if (score[i] == - size + 1){
+                way = i;
+                break;
+            }
+        }
+        return way;
+    }
+
+    private static int diagonalScore(int mark) {
+        int score = 0;
+        if (mark==0){
+            for (int i = 0; i < size; i++){
+                if (map[i][i]==DOT_X){
+                    score--;
+                }
+                if (map[i][i]==DOT_O){
+                    score++;
+                }
+            }
+        }
+        if (mark==1){
+            for (int i = 0; i < size; i++){
+                if (map[i][size-i-1]==DOT_X){
+                    score--;
+                }
+                if (map[i][size-i-1]==DOT_O){
+                    score++;
+                }
+            }
+        }
+        return score;
+    }
+
+    private static int verticalScore(int position) {
+        int score = 0;
+        for (int i = 0; i < size; i++){
+            if (map[i][position]==DOT_X){
+                score--;
+            }
+            if (map[i][position]==DOT_O){
+                score++;
+            }
+        }
+        return score;
+    }
+
+    private static int horizontalScore(int position) {
+        int score = 0;
+        for (int i = 0; i < size; i++){
+            if (map[position][i]==DOT_X){
+                score--;
+            }
+            if (map[position][i]==DOT_O){
+                score++;
+            }
+        }
+        return score;
+    }
 
     private static void gameParameter() {
         size = areaSize();
@@ -250,8 +358,6 @@ public class Start {
                 map [i] [j] = DOT_EMPTY;
             }
         }
-        wayScore = new int[size+size+2];
-
     }   //Инициализация карты
 
     private static void printMap(){
@@ -267,8 +373,5 @@ public class Start {
             }
             System.out.println();
         }
-        for (int i = size+size+2; i>0; i--){
-            System.out.print(wayScore[i-1]);
-        }//temportary
     }   //Отрисовка карты
 }
