@@ -8,7 +8,6 @@ public class Start {
     private static boolean rival;
     private static boolean marker = true;
     private static int dif; //Уровень сложности
-    //private static int wayScore[];
 
     private static final char DOT_EMPTY = '·';
     private static final char DOT_X = 'X';
@@ -29,12 +28,10 @@ public class Start {
     }   //Логика игры
 
     private static boolean isEndGame(){
-
         if (horizontalCheck()){return true;}
         if (verticalCheck()){return true;}
         if (diagonalCheck()){return true;}
         return checkForDraw();
-
     }   //Проверка окончания игры
 
     private static boolean checkForDraw() {
@@ -198,6 +195,11 @@ public class Start {
                 } while (!isValid(x, y));
                 break;
             case (2):
+                System.out.println("Данный уровень сложности не реализован");
+                do {
+                    x = random.nextInt(size);
+                    y = random.nextInt(size);
+                } while (!isValid(x, y));
                 break;
             case (3):
                 int way;
@@ -209,7 +211,6 @@ public class Start {
                         wayScore[i+size+size] = wayScore[i+size+size] + diagonalScore(i);
                     }
                 }
-
                 way = switchWay(wayScore);
                 if (way < size){
                     do {
@@ -248,7 +249,6 @@ public class Start {
         printMap();
     }   //Ход компьютера
 
-
     private static int switchWay(int[] score) {
         int rate = 0;
         int way = 0;
@@ -277,7 +277,6 @@ public class Start {
                 }
             }
         }
-
         if (mark==1){
             for (int i = 0; i < size; i++){
                 if (map[i][size-i-1]==DOT_X){
@@ -288,7 +287,6 @@ public class Start {
                 }
             }
         }
-
         return score;
     }
 
