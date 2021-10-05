@@ -203,12 +203,12 @@ public class Start {
                 break;
             case (3):
                 int way;
-                int[] wayScore = new int[size+size+2];
+                int[] wayScore = new int[size*2+2];
                 for(int i = 0; i < size; i++){
                     wayScore[i] = wayScore[i] + horizontalScore(i);
                     wayScore[i+size] = wayScore[i+size] + verticalScore(i);
                     if (i<2){
-                        wayScore[i+size+size] = wayScore[i+size+size] + diagonalScore(i);
+                        wayScore[i+size*2] = wayScore[i+size*2] + diagonalScore(i);
                     }
                 }
                 way = switchWay(wayScore);
@@ -252,6 +252,12 @@ public class Start {
     private static int switchWay(int[] score) {
         int rate = 0;
         int way = 0;
+        for (int i = 0; i < score.length; i++){
+            if (score[i] == size - 1){
+                way = i;
+                return way;
+            }
+        }
         for (int i = 0; i < score.length; i++){
             if (score[i] > rate){
                 rate = score[i];
