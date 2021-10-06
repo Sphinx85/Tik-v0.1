@@ -214,14 +214,21 @@ public class Start {
                 way = switchWay(wayScore);
                 if (way < size){
                     do {
-                        x = random.nextInt(size);
-                        y = way + 1;
+                        for (int i = 0; i < size; i++){
+                            if (map[way][i] == DOT_EMPTY){
+                                x = i;
+                                break;
+                            }
+                        }
+                        y = way;
                     } while (!isValid(x, y));
+                    break;
                 } else if (way < size*2){
                     do {
-                        x = way - size + 1;
+                        x = way - size;
                         y = random.nextInt(size);
                     } while (!isValid(x, y));
+                    break;
                 } else {
                     do {
                         if (way == size * 2){
@@ -235,8 +242,8 @@ public class Start {
                         if (way == size * 2 + 1){
                             for (int i = 0; i < size; i++) {
                                 if (map[i][size-i-1] == DOT_EMPTY) {
-                                    x = i;
-                                    y = size-i-1;
+                                    y = i;
+                                    x = size-i-1;
                                 }
                             }
                         }
@@ -250,10 +257,16 @@ public class Start {
     }   //Ход компьютера
 
     private static int switchWay(int[] score) {
-        int rate = 0;
-        int way = 0;
+        int rate = -size;
+        int way = -1;
         for (int i = 0; i < score.length; i++){
             if (score[i] == size - 1){
+                way = i;
+                return way;
+            }
+        }
+        for (int i = 0; i < score.length; i++){
+            if (score[i] == - size + 1){
                 way = i;
                 return way;
             }
@@ -262,10 +275,6 @@ public class Start {
             if (score[i] > rate){
                 rate = score[i];
                 way = i;
-            }
-            if (score[i] == - size + 1){
-                way = i;
-                break;
             }
         }
         return way;
