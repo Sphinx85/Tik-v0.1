@@ -257,10 +257,16 @@ public class Start {
     }   //Ход компьютера
 
     private static int switchWay(int[] score) {
-        int rate = 0;
-        int way = 0;
+        int rate = -size;
+        int way = -1;
         for (int i = 0; i < score.length; i++){
             if (score[i] == size - 1){
+                way = i;
+                return way;
+            }
+        }
+        for (int i = 0; i < score.length; i++){
+            if (score[i] == - size + 1){
                 way = i;
                 return way;
             }
@@ -269,10 +275,6 @@ public class Start {
             if (score[i] > rate){
                 rate = score[i];
                 way = i;
-            }
-            if (score[i] == - size + 1){
-                way = i;
-                break;
             }
         }
         return way;
